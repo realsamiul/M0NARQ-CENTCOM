@@ -1,6 +1,7 @@
 "use server";
 
-import { PATHS } from "./data-sources";
+import { readFile } from "fs/promises";
+import { join } from "path";
 import type {
   ApiUsageTrend,
   DashboardJson,
@@ -11,8 +12,6 @@ import type {
 } from "@/types/dashboard";
 
 // Lightweight CSV parser (no extra deps): assumes comma-separated values
-// Note: This simple parser expects clean CSV data without commas in values
-// For complex CSVs with quoted fields, consider using a dedicated CSV library
 function parseCsv(raw: string): string[][] {
   return raw
     .trim()
@@ -20,36 +19,33 @@ function parseCsv(raw: string): string[][] {
     .map((line) => line.split(","));
 }
 
-function getBaseUrl() {
-  // In production, use the actual domain. In dev, use localhost with dynamic port
-  if (process.env.NEXT_PUBLIC_BASE_URL) {
-    return process.env.NEXT_PUBLIC_BASE_URL;
+// Get the public directory path
+function getPublicPath(filename: string): string {
+  return join(process.cwd(), "public", "data", filename);
+}
+
+// Read file directly from filesystem (works in build + runtime)
+async function readFileText(filename: string): Promise<string> {
+  try {
+    return await readFile(getPublicPath(filename), "utf-8");
+  } catch (error) {
+    console.error(`Failed to read ${filename}:`, error);
+    throw new Error(`Failed to load ${filename}`);
   }
-  // For server-side in development
-  const port = process.env.PORT || 3000;
-  return `http://localhost:${port}`;
 }
 
-async function fetchText(path: string): Promise<string> {
-  const url = `${getBaseUrl()}${path}`;
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
-  return res.text();
-}
-
-async function fetchJson<T>(path: string): Promise<T> {
-  const url = `${getBaseUrl()}${path}`;
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
-  return res.json() as Promise<T>;
+// Parse JSON file
+async function readFileJson<T>(filename: string): Promise<T> {
+  const text = await readFileText(filename);
+  return JSON.parse(text) as T;
 }
 
 export async function loadDashboardJson(): Promise<DashboardJson> {
-  return fetchJson<DashboardJson>(PATHS.DASHBOARD_JSON);
+  return readFileJson<DashboardJson>("DASHBOARD_DATA_COMPLETE.json");
 }
 
 export async function loadKpis(): Promise<KpiSummary[]> {
-  const text = await fetchText(PATHS.KPI_SUMMARY);
+  const text = await readFileText("KPI_SUMMARY.csv");
   const [_header, ...rows] = parseCsv(text);
   return rows
     .filter((r) => r.length >= 5 && r[0])
@@ -63,7 +59,7 @@ export async function loadKpis(): Promise<KpiSummary[]> {
 }
 
 export async function loadDemoCards(): Promise<DemoCard[]> {
-  const text = await fetchText(PATHS.DEMO_CARDS);
+  const text = await readFileText("DEMO_CARDS.csv");
   const [_header, ...rows] = parseCsv(text);
   return rows
     .filter((r) => r.length >= 4 && r[0])
@@ -76,7 +72,7 @@ export async function loadDemoCards(): Promise<DemoCard[]> {
 }
 
 export async function loadModelComparison(): Promise<ModelComparisonRow[]> {
-  const text = await fetchText(PATHS.MODEL_COMPARISON);
+  const text = await readFileText("MODEL_COMPARISON.csv");
   const [_header, ...rows] = parseCsv(text);
   return rows
     .filter((r) => r.length >= 4 && r[0])
@@ -93,7 +89,7 @@ export async function loadModelComparison(): Promise<ModelComparisonRow[]> {
 }
 
 export async function loadApiUsage(): Promise<ApiUsageTrend[]> {
-  const text = await fetchText(PATHS.API_USAGE_TRENDS);
+  const text = await readFileText("API_USAGE_TRENDS.csv");
   const [_header, ...rows] = parseCsv(text);
   return rows
     .filter((r) => r.length >= 2 && r[0])
@@ -107,9 +103,13 @@ export async function loadTrainingTrends(): Promise<TrainingTrend[]> {
   // Try canonical first, then fallback duplicate-extension
   let text: string;
   try {
-    text = await fetchText(PATHS.TRAINING_TRENDS_PRIMARY);
+    text = await readFileText("TRAINING_TRENDS.csv");
   } catch {
-    text = await fetchText(PATHS.TRAINING_TRENDS_FALLBACK);
+    try {
+      text = await readFileText("TRAINING_TRENDS.csv.csv");
+    } catch {
+      throw new Error("Could not load TRAINING_TRENDS data");
+    }
   }
   const [_header, ...rows] = parseCsv(text);
   return rows
@@ -124,12 +124,20 @@ export async function loadTrainingTrends(): Promise<TrainingTrend[]> {
 // Markdown docs
 export async function loadTechCodex(): Promise<string> {
   try {
-    return await fetchText(PATHS.TECH_CODEX_PRIMARY);
+    return await readFileText("TECH-CODEX-DASHBOARD.md");
   } catch {
-    return await fetchText(PATHS.TECH_CODEX_FALLBACK);
+    try {
+      return await readFileText("TECH-CODEX-DASHBOARD.md.md");
+    } catch {
+      return "# Technical Documentation\n\nDocumentation not available.";
+    }
   }
 }
 
 export async function loadExecutiveSummary(): Promise<string> {
-  return fetchText(PATHS.EXEC_SUMMARY);
+  try {
+    return await readFileText("executive_summary.md");
+  } catch {
+    return "# Executive Summary\n\nSummary not available.";
+  }
 }
