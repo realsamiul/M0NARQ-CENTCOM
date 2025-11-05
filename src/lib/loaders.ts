@@ -19,15 +19,26 @@ function parseCsv(raw: string): string[][] {
     .map((line) => line.split(","));
 }
 
+function getBaseUrl() {
+  // In production, use the actual domain. In dev, use localhost
+  if (process.env.NEXT_PUBLIC_BASE_URL) {
+    return process.env.NEXT_PUBLIC_BASE_URL;
+  }
+  // For server-side, construct the base URL
+  return "http://localhost:3000";
+}
+
 async function fetchText(path: string): Promise<string> {
-  const res = await fetch(path, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to fetch ${path}: ${res.status}`);
+  const url = `${getBaseUrl()}${path}`;
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
   return res.text();
 }
 
 async function fetchJson<T>(path: string): Promise<T> {
-  const res = await fetch(path, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to fetch ${path}: ${res.status}`);
+  const url = `${getBaseUrl()}${path}`;
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
   return res.json() as Promise<T>;
 }
 
