@@ -11,6 +11,8 @@ import {
   ApiUsage,
   TrainingTrends,
   DocsSections,
+  InfrastructureMetrics,
+  BusinessImpact,
 } from "@/components/chart-blocks";
 import Container from "@/components/container";
 
@@ -38,6 +40,12 @@ export default function Home() {
 
       {/* Model Comparison Table */}
       <ModelComparison />
+
+      {/* Infrastructure Metrics */}
+      <InfrastructureMetrics />
+
+      {/* Business Impact */}
+      <BusinessImpact />
 
       {/* Documentation Sections */}
       <DocsSections />

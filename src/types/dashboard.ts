@@ -37,6 +37,28 @@ export interface ApiUsageTrend {
   requests_k: number;
 }
 
+export interface InfrastructureMetrics {
+  cloud_provider: string;
+  project_id: string;
+  gpu_hours_monthly: number;
+  storage_gb: number;
+  api_requests_monthly: number;
+  uptime_pct: number;
+  avg_response_time_ms: number;
+  peak_concurrent_users: number;
+  data_processed_tb_monthly: number;
+}
+
+export interface BusinessImpact {
+  total_cost_savings_usd: number;
+  clients_served: number;
+  countries_deployed: number;
+  government_partnerships: number;
+  research_publications: number;
+  patent_applications: number;
+  team_size: number;
+}
+
 export interface DashboardJson {
   metadata: Record<string, unknown>;
   system_overview: {
@@ -54,9 +76,9 @@ export interface DashboardJson {
   demo_5_lpg: Record<string, unknown>;
   demo_6_deforestation: Record<string, unknown>;
   model_comparison: Array<Record<string, unknown>>;
-  infrastructure_metrics: Record<string, unknown>;
+  infrastructure_metrics: InfrastructureMetrics;
   satellite_data: Record<string, unknown>;
-  business_impact: Record<string, unknown>;
+  business_impact: BusinessImpact;
   performance_trends: {
     model_training: TrainingTrend[];
     api_usage: ApiUsageTrend[];

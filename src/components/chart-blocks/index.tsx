@@ -12,3 +12,5 @@ export { default as ModelComparison } from "./charts/model-comparison";
 export { default as ApiUsage } from "./charts/api-usage-chart";
 export { default as TrainingTrends } from "./charts/training-trends-chart";
 export { default as DocsSections } from "./charts/docs-sections";
+export { default as InfrastructureMetrics } from "./charts/infrastructure-metrics";
+export { default as BusinessImpact } from "./charts/business-impact";
