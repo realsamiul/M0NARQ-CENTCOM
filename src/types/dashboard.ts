@@ -51,7 +51,6 @@ export interface InfrastructureMetrics {
 
 export interface BusinessImpact {
   total_cost_savings_usd: number;
-  total_revenue_generated_usd: number;
   clients_served: number;
   countries_deployed: number;
   government_partnerships: number;

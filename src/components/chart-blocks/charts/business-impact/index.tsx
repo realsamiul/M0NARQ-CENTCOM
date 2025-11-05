@@ -7,8 +7,8 @@ export default async function BusinessImpact() {
   const dashboard = await loadDashboardJson();
   const impact = dashboard.business_impact;
   
-  // Get lives saved from flood demo
-  const livesSaved = dashboard.demo_1_flood?.lives_potentially_saved || 0;
+  // Get lives saved from flood demo - this is a cross-cutting metric shown in business impact
+  const livesSaved = (dashboard.demo_1_flood as { lives_potentially_saved?: number })?.lives_potentially_saved || 0;
 
   const metrics = [
     {
