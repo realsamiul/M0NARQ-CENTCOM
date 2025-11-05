@@ -1,0 +1,9 @@
+metric,value,unit,target,status
+Overall System Accuracy,89.2,%,90.0,ON_TRACK
+Processing Speed,99.5,% faster,95.0,EXCEEDED
+Cost Reduction,94.7,%,80.0,EXCEEDED
+Model Inference Time,42.0,ms,50.0,EXCEEDED
+Data Quality,99.84,%,98.0,EXCEEDED
+Uptime,99.8,%,99.5,EXCEEDED
+False Positive Rate,4.3,%,5.0,EXCEEDED
+Customer Satisfaction,4.6,/5,4.5,EXCEEDED

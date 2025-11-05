@@ -1,0 +1,7 @@
+model,accuracy_pct,params_m,inference_ms,demo,r2_score,params_k,mape_pct
+SegFormer-B2,91.0,27.4,45,Flood,,,
+SimSiam,87.0,18.2,32,Crop,,,
+XGBoost,,,3,Freight,0.7,1200.0,
+LightGBM,,,2,Freight,0.65,980.0,
+Prophet,,,150,Urban,,450.0,9.8
+RandomForest,,,8,Freight,0.58,5000.0,
