@@ -1,0 +1,18 @@
+export const DATA_BASE = "/data";
+
+export const PATHS = {
+  DASHBOARD_JSON: `${DATA_BASE}/DASHBOARD_DATA_COMPLETE.json`,
+  KPI_SUMMARY: `${DATA_BASE}/KPI_SUMMARY.csv`,
+  MODEL_COMPARISON: `${DATA_BASE}/MODEL_COMPARISON.csv`,
+  DEMO_CARDS: `${DATA_BASE}/DEMO_CARDS.csv`,
+  API_USAGE_TRENDS: `${DATA_BASE}/API_USAGE_TRENDS.csv`,
+
+  // Handle duplicate extension: prefer canonical, fallback to duplicate
+  TRAINING_TRENDS_PRIMARY: `${DATA_BASE}/TRAINING_TRENDS.csv`,
+  TRAINING_TRENDS_FALLBACK: `${DATA_BASE}/TRAINING_TRENDS.csv.csv`,
+
+  TECH_CODEX_PRIMARY: `${DATA_BASE}/TECH-CODEX-DASHBOARD.md`,
+  TECH_CODEX_FALLBACK: `${DATA_BASE}/TECH-CODEX-DASHBOARD.md.md`,
+
+  EXEC_SUMMARY: `${DATA_BASE}/executive_summary.md`,
+} as const;

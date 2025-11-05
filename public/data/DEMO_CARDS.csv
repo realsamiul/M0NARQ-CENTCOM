@@ -1,0 +1,7 @@
+demo_id,name,status,primary_metric
+demo_1_flood,HAWKEYE Flood Intelligence,PRODUCTION,91.0% Accuracy
+demo_2_crop,HAWKEYE Crop Intelligence,PRODUCTION,In Development
+demo_3_urban,HAWKEYE Urban Intelligence,PRODUCTION,9.8% MAPE
+demo_4_freight,HYPERION Freight Engine,PRODUCTION,R²=0.70
+demo_5_lpg,HYPERION LPG Engine,PRODUCTION,6.2% MAPE
+demo_6_deforestation,HAWKEYE Deforestation (Planned),DEVELOPMENT,In Development
