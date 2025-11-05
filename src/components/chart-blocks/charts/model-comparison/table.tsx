@@ -27,8 +27,8 @@ export default function ModelTable({ models }: ModelTableProps) {
     const aVal = a[sortKey];
     const bVal = b[sortKey];
 
-    if (aVal === "" || aVal === undefined) return 1;
-    if (bVal === "" || bVal === undefined) return -1;
+    if (aVal === null || aVal === undefined) return 1;
+    if (bVal === null || bVal === undefined) return -1;
 
     if (typeof aVal === "string" && typeof bVal === "string") {
       return sortOrder === "asc"
@@ -43,8 +43,8 @@ export default function ModelTable({ models }: ModelTableProps) {
     return 0;
   });
 
-  const formatValue = (val: number | "" | undefined, suffix = "") => {
-    if (val === "" || val === undefined) return "-";
+  const formatValue = (val: number | null | undefined, suffix = "") => {
+    if (val === null || val === undefined) return "-";
     return `${val}${suffix}`;
   };
 
@@ -109,18 +109,12 @@ export default function ModelTable({ models }: ModelTableProps) {
               className="border-b border-border hover:bg-muted/50"
             >
               <td className="p-3 font-medium">{model.model}</td>
-              <td className="p-3">
-                {formatValue(model.accuracy_pct as number, "%")}
-              </td>
-              <td className="p-3">{formatValue(model.params_m as number)}</td>
-              <td className="p-3">
-                {formatValue(model.inference_ms as number, "ms")}
-              </td>
+              <td className="p-3">{formatValue(model.accuracy_pct, "%")}</td>
+              <td className="p-3">{formatValue(model.params_m)}</td>
+              <td className="p-3">{formatValue(model.inference_ms, "ms")}</td>
               <td className="p-3">{model.demo}</td>
-              <td className="p-3">{formatValue(model.r2_score as number)}</td>
-              <td className="p-3">
-                {formatValue(model.mape_pct as number, "%")}
-              </td>
+              <td className="p-3">{formatValue(model.r2_score)}</td>
+              <td className="p-3">{formatValue(model.mape_pct, "%")}</td>
             </tr>
           ))}
         </tbody>

@@ -17,13 +17,13 @@ export interface DemoCard {
 
 export interface ModelComparisonRow {
   model: string;
-  accuracy_pct?: number | "";
-  params_m?: number | "";
-  inference_ms?: number | "";
+  accuracy_pct?: number | null;
+  params_m?: number | null;
+  inference_ms?: number | null;
   demo: string;
-  r2_score?: number | "";
-  params_k?: number | "";
-  mape_pct?: number | "";
+  r2_score?: number | null;
+  params_k?: number | null;
+  mape_pct?: number | null;
 }
 
 export interface TrainingTrend {

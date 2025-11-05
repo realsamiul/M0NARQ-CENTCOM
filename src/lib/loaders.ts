@@ -10,9 +10,10 @@ import type {
   TrainingTrend,
 } from "@/types/dashboard";
 
-// Lightweight CSV parser (no extra deps): assumes comma, simple rows.
+// Lightweight CSV parser (no extra deps): assumes comma-separated values
+// Note: This simple parser expects clean CSV data without commas in values
+// For complex CSVs with quoted fields, consider using a dedicated CSV library
 function parseCsv(raw: string): string[][] {
-  // naive CSV split; acceptable for our simple datasets
   return raw
     .trim()
     .split(/\r?\n/)
@@ -20,12 +21,13 @@ function parseCsv(raw: string): string[][] {
 }
 
 function getBaseUrl() {
-  // In production, use the actual domain. In dev, use localhost
+  // In production, use the actual domain. In dev, use localhost with dynamic port
   if (process.env.NEXT_PUBLIC_BASE_URL) {
     return process.env.NEXT_PUBLIC_BASE_URL;
   }
-  // For server-side, construct the base URL
-  return "http://localhost:3000";
+  // For server-side in development
+  const port = process.env.PORT || 3000;
+  return `http://localhost:${port}`;
 }
 
 async function fetchText(path: string): Promise<string> {
@@ -80,13 +82,13 @@ export async function loadModelComparison(): Promise<ModelComparisonRow[]> {
     .filter((r) => r.length >= 4 && r[0])
     .map((r) => ({
       model: r[0],
-      accuracy_pct: r[1] ? Number(r[1]) : "",
-      params_m: r[2] ? Number(r[2]) : "",
-      inference_ms: r[3] ? Number(r[3]) : "",
+      accuracy_pct: r[1] ? Number(r[1]) : null,
+      params_m: r[2] ? Number(r[2]) : null,
+      inference_ms: r[3] ? Number(r[3]) : null,
       demo: r[4],
-      r2_score: r[5] ? Number(r[5]) : "",
-      params_k: r[6] ? Number(r[6]) : "",
-      mape_pct: r[7] ? Number(r[7]) : "",
+      r2_score: r[5] ? Number(r[5]) : null,
+      params_k: r[6] ? Number(r[6]) : null,
+      mape_pct: r[7] ? Number(r[7]) : null,
     }));
 }
 
