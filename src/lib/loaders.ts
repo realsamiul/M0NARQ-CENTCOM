@@ -29,7 +29,7 @@ async function readFileText(filename: string): Promise<string> {
   try {
     return await readFile(getPublicPath(filename), "utf-8");
   } catch (error) {
-    console.error(`Failed to read ${filename}:`, error);
+   
     throw new Error(`Failed to load ${filename}`);
   }
 }
